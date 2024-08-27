@@ -4,7 +4,7 @@ pipeline {
     environment {
         ANSIBLE_PLAYBOOK = '/etc/ansible/deploy_python.yml'
         ANSIBLE_INVENTORY = '/etc/ansible/hosts'
-        SSH_PRIVATE_KEY = '/var/lib/jenkins/.ssh/id_rsa'  // Correct path to your SSH key
+        SSH_PRIVATE_KEY = '/var/lib/jenkins/.ssh/id_rsa'
     }
 
     stages {
@@ -18,9 +18,8 @@ pipeline {
         stage('Verify SSH Key') {
             steps {
                 script {
-                    // Check if the SSH key is accessible
                     sh 'ls -l ${SSH_PRIVATE_KEY}'
-                    sh 'cat ${SSH_PRIVATE_KEY}'
+                    sh 'cat ${SSH_PRIVATE_KEY} || true'
                 }
             }
         }
@@ -28,11 +27,10 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    ansiblePlaybook(
-                        playbook: env.ANSIBLE_PLAYBOOK,
-                        inventory: env.ANSIBLE_INVENTORY,
-                        extraVars: [ansible_ssh_private_key_file: env.SSH_PRIVATE_KEY]
-                    )
+                    sh '''
+                        echo "Running Ansible Playbook"
+                        ansible-playbook -vvv ${ANSIBLE_PLAYBOOK} -i ${ANSIBLE_INVENTORY} --private-key=${SSH_PRIVATE_KEY}
+                    '''
                 }
             }
         }
