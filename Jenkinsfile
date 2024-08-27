@@ -29,7 +29,7 @@ pipeline {
                 script {
                     sh '''
                         echo "Running Ansible Playbook"
-                        ansible-playbook -vvv ${ANSIBLE_PLAYBOOK} -i ${ANSIBLE_INVENTORY} --private-key=${SSH_PRIVATE_KEY}
+                        ansible-playbook  ${ANSIBLE_PLAYBOOK} -i ${ANSIBLE_INVENTORY} --private-key=${SSH_PRIVATE_KEY}
                     '''
                 }
             }
