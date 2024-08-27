@@ -1,0 +1,23 @@
+---
+- name: Deploy Python file to Jenkins agent
+  hosts: jenkins_node
+  become: yes
+  tasks:
+    - name: Ensure destination directory exists with correct permissions
+      file:
+        path: /home/jenkins/destination_directory
+        state: directory
+        mode: '0755'
+        owner: jenkins
+        group: jenkins
+
+    - name: Copy Python file to the node
+      copy:
+        src: /etc/ansible/hello_world.py
+        dest: /home/jenkins/destination_directory/hello_world.py
+        mode: '0755'
+        owner: jenkins
+        group: jenkins
+
+    - name: Run the Python script
+      command: python3 /home/jenkins/destination_directory/hello_world.py
