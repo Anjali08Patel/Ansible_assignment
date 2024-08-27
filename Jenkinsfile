@@ -1,33 +1,35 @@
 pipeline {
-    agent none
-    
+    agent any
+
     environment {
-        ANSIBLE_INVENTORY = "/etc/ansible/hosts"
-        ANSIBLE_PLAYBOOK = "assignment1.yml"
-        ANSIBLE_VAULT_PASSWORD_FILE = "/etc/ansible/vault_pass.txt"
-        SSH_PRIVATE_KEY = '/var/lib/jenkins/.ssh/id_rsa'
+        ANSIBLE_PLAYBOOK = '/etc/ansible/deploy_python.yml'
+        ANSIBLE_INVENTORY = '/etc/ansible/hosts'
     }
 
     stages {
-    
+        stage('Checkout Code') {
+            steps {
+                echo 'Checking out code...'
+                // Add any SCM checkout steps if needed
+            }
+        }
+
         stage('Run Ansible Playbook') {
-            agent { label 'master' }
             steps {
                 script {
-                    sh """
-                        ansible-playbook ${ANSIBLE_PLAYBOOK} -i ${ANSIBLE_INVENTORY} --private-key=${SSH_PRIVATE_KEY} --vault-password-file ${ANSIBLE_VAULT_PASSWORD_FILE}
-                    """
+                    ansiblePlaybook(
+                        playbook: env.ANSIBLE_PLAYBOOK,
+                        inventory: env.ANSIBLE_INVENTORY
+                        // Note: Remove `extras` if not needed
+                    )
                 }
             }
         }
     }
 
     post {
-        success {
-            echo 'Ansible Playbook executed successfully!'
-        }
-        failure {
-            echo 'Ansible Playbook failed to execute.'
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
