@@ -4,7 +4,7 @@ pipeline {
     environment {
         ANSIBLE_PLAYBOOK = '/etc/ansible/deploy_python.yml'
         ANSIBLE_INVENTORY = '/etc/ansible/hosts'
-        SSH_PRIVATE_KEY = '/path/to/private/key'  // Update this if using a specific SSH key
+        SSH_PRIVATE_KEY = '/var/lib/jenkins/.ssh/id_rsa'  // Correct path to your SSH key
     }
 
     stages {
