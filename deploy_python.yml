@@ -1,6 +1,6 @@
 ---
 - name: Deploy Python file to Jenkins agent
-  hosts: jenkins_node
+  hosts: jenkins_nodes
   become: yes
   tasks:
     - name: Ensure destination directory exists with correct permissions
