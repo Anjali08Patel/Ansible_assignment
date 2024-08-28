@@ -15,14 +15,7 @@ pipeline {
             }
         }
 
-        stage('Verify SSH Key') {
-            steps {
-                script {
-                    sh 'ls -l ${SSH_PRIVATE_KEY}'
-                    sh 'cat ${SSH_PRIVATE_KEY} || true'
-                }
-            }
-        }
+       
 
         stage('Run Ansible Playbook') {
             steps {
